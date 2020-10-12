@@ -1,0 +1,12 @@
+.inputContainer {
+    display: flex;
+    flex-direction: column;
+}
+.Input {
+    height: 40px;
+}
+.error {
+    color: red;
+    font-family: SansSerif, sans-serif;
+    margin: 3px 0;
+}
