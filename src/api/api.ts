@@ -2,7 +2,6 @@ import axios from "axios";
 
 let instance = axios.create({
     baseURL:  "https://test.megapolis-it.ru/",
-    withCredentials: true,
 });
 
 //API
@@ -18,12 +17,12 @@ export const API = {
         })
     },
 
-    updateTask (id: number, title: string) {
+    updateTask (id: number | string, title: string) {
         return instance.post(`api/list/${id}`, {title: title}).then(res => {
             return res.data
         })
     },
-    removeTask (idTask: number){
+    removeTask (idTask: string | number){
         return instance.delete(`api/list/${idTask}`)
     }
 

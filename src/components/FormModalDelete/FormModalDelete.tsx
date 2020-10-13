@@ -1,7 +1,6 @@
-import React, {CSSProperties} from 'react';
+import React from 'react';
 import style from './FormModalDelete.module.css'
 import {Button} from "../common/Button/Button";
-import { Input } from '../common/Input/Input';
 
 export type FormModalPropsType = {
     modalClosed: () => void

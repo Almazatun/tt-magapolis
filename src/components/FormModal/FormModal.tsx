@@ -5,6 +5,7 @@ import {Input} from '../common/Input/Input';
 import cancel from '../../components/common/style/icons/cancel.svg'
 
 export type FormModalPropsType = {
+    error: string
     title: string
     onChangeTitle: (value: string) => void
     modalClosed: () => void
@@ -24,9 +25,13 @@ export const FormModal: React.FC <FormModalPropsType> = (props) => {
     };
 
     const createTask = () => {
-        props.modalClosed();
-        props.createTask();
-        props.onChangeTitle("");
+        if (props.title.trim() !== '') {
+            props.modalClosed();
+            props.createTask();
+            props.onChangeTitle("");
+        } else {
+            props.createTask();
+        }
     };
 
 
@@ -37,7 +42,7 @@ export const FormModal: React.FC <FormModalPropsType> = (props) => {
                 <img onClick={cancelHandler} src={cancel} alt="/"/>
             </div>
             <div className={style.middle}>
-                <Input value={props.title} onChange={onChnage} />
+                <Input value={props.title} onChange={onChnage}  error={props.error ? props.error : ''}/>
             </div>
             <div className={style.bottom}>
                 <Button borderColor={'#39b54a'} backgroundAfter={'#39b54a'} onClick={createTask} title={'Создать'}/>

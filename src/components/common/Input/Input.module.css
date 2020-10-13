@@ -6,7 +6,11 @@
     height: 40px;
 }
 .error {
-    color: red;
-    font-family: SansSerif, sans-serif;
+    position: relative;
+    right: 130px;
+    font-family: Roboto, sans-serif;
+    font-weight: normal;
+    font-size: 12px;
+    color: #FF0000;
     margin: 3px 0;
 }

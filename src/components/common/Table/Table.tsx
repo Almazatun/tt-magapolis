@@ -4,25 +4,65 @@ import {Modal} from "../../../features/Modal";
 import {FormModalDelete} from "../../FormModalDelete/FormModalDelete";
 import edit from '../style/icons/edit.svg'
 import remove from '../style/icons/remove.svg'
+import {TaskType} from "../../../api/api";
+import {FormModalModify} from "../../FormModalModify/FormModalModify";
 
-export const Table: React.FC = () => {
+
+type TablePropsType = {
+    tasks: Array<TaskType>
+    deleteTask: (idTask: string | number) => void
+    changeTitleOfTask: (taskId: number | string ,title: string) => void
+}
+
+export const Table: React.FC<TablePropsType> = (props) => {
 
     const [modalToggle, setModalToggle] = useState<boolean>(false);
+    const [idTask, setIdTask] = useState<string | number>('');
+    ///////////////////////////////////////////////////////////////////////
 
+    const [modalModifyTask, setModalModifyTask] = useState<boolean>(false);
+    const [description, setDescription] = useState<string>('')
+
+    const [taskTitle, setTaskTitle] = useState<string>('')
+
+    const onChangeHandler = (title: string) => {
+        setDescription(title)
+    }
+
+    const modalModifyHandler = () => {
+        setModalModifyTask(!modalModifyTask);
+    };
+
+    const changeTitleOfTask = () => {
+        props.changeTitleOfTask(idTask, description)
+    }
+
+////////////////////////////////////////////////////////////////////////////
     const modalHandler = () => {
         setModalToggle(!modalToggle);
     };
 
-    let initArr = [
-        {id: '1', title: 'Описание'},
-        {id: '2', title: 'Описание'},
-        {id: '3', title: 'Описание'},
-        {id: '4', title: 'Описание'},
-        {id: '5', title: 'Описание'},
-    ]
+    const setId = (idTask: string | number) => {
+        setIdTask(idTask)
+    }
 
+    const deleteTask = () => {
+        props.deleteTask(idTask)
+    }
 
-    let TSX = initArr.map((e, index) => {
+    let TSX = props.tasks.map((e, index) => {
+        //console.log(typeof e.id)
+        const showModal = () => {
+            setId(e.id)
+            modalHandler()
+        }
+
+        const showModify = () => {
+            setId(e.id)
+            modalModifyHandler()
+            setDescription(e.title)
+            setTaskTitle(`Задача №${++index}`)
+        }
         return (
             <div className={style.element}>
                 <div className={style.th}>
@@ -31,13 +71,11 @@ export const Table: React.FC = () => {
                 </span>
                 </div>
                 <div className={style.tr}>
-                    <div className={style.v1}> </div>
                     <span>{e.title}</span>
-                    <div className={style.v2}> </div>
                 </div>
                 <div className={style.btns}>
-                    <img src={edit} alt="/"/>
-                    <img onClick={modalHandler} src={remove} alt="/"/>
+                    <img onClick={showModify} src={edit} alt="/"/>
+                    <img onClick={showModal} src={remove} alt="/"/>
                 </div>
             </div>
         )
@@ -46,11 +84,22 @@ export const Table: React.FC = () => {
     return (
         <>
             {TSX}
-            <Modal show={modalToggle} modalClosed={modalHandler}>
+            <Modal show={modalToggle} >
                 <FormModalDelete
-                    deleteTask={() => alert('Удалить')}
+                    deleteTask={deleteTask}
                     modalClosed={modalHandler}
                     name={'Краткое описание'}
+                />
+            </Modal>
+            {/*//////////////////////////////////////////////////////////////*/}
+            <Modal show={modalModifyTask} >
+                <FormModalModify
+                    taskName={taskTitle}
+                    title={description}
+                    modalClosed={modalModifyHandler}
+                    name={'Краткое описание'}
+                    onChangeTitle={onChangeHandler}
+                    modifyTitle={changeTitleOfTask}
                 />
             </Modal>
         </>
